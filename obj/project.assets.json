@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\timot\\Downloads\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment\\FirasTimothy_PRG2Assignment.csproj",
+      "projectUniqueName": "C:\\Users\\timot\\OneDrive\\Desktop\\PRGII_ASG\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
       "projectName": "FirasTimothy_PRG2Assignment",
-      "projectPath": "C:\\Users\\timot\\Downloads\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment\\FirasTimothy_PRG2Assignment.csproj",
+      "projectPath": "C:\\Users\\timot\\OneDrive\\Desktop\\PRGII_ASG\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
       "packagesPath": "C:\\Users\\timot\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\timot\\Downloads\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment\\obj\\",
+      "outputPath": "C:\\Users\\timot\\OneDrive\\Desktop\\PRGII_ASG\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
