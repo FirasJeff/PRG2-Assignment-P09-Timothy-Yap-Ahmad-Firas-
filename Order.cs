@@ -9,49 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace S10268547H_PRG2Assignment
+namespace FirasTimothy_PRG2Assignment
 {
-    class FoodItem
-    {
-        public string ItemName { get; set; }
-        public string ItemDesc { get; set; }
-        public double ItemPrice { get; set; }
-        public string Customise { get; set; }
-
-        public FoodItem() { }
-        public FoodItem(string itemName, string itemDesc, double itemPrice, string customise)
-        {
-            ItemName = itemName;
-            ItemDesc = itemDesc;
-            ItemPrice = itemPrice;
-            Customise = customise;
-        }
-        public override string ToString()
-        {
-            return $"Item Name: {ItemName} Item Description: {ItemDesc} Item Price: {ItemPrice} Customise: {Customise}";
-        }
-    }
-
-    class OrderedFoodItem
-    {
-        public int QtyOrdered { get; set; }
-        public double SubTotal { get; set; }
-        public FoodItem FoodItem { get; set; }
-        public OrderedFoodItem() { }
-        public OrderedFoodItem(int qtyOrdered, double subTotal, FoodItem fooditem)
-        {
-            QtyOrdered = qtyOrdered;
-            SubTotal = subTotal;
-            FoodItem = fooditem;
-        }
-        public double CalculateSubTotal()
-        {
-            SubTotal = Convert.ToDouble(QtyOrdered) * FoodItem.ItemPrice;
-            return SubTotal;
-        }
-
-    }
-
     class Order
     {
         public int OrderID { get; set; }
@@ -104,9 +63,19 @@ namespace S10268547H_PRG2Assignment
                 return false;
             }
         }
+        public void DisplayOrderedFoodItems()
+        {
+            Console.WriteLine("Ordered food items \n==================");
+            foreach (var item in orderedItems)
+            {
+                Console.WriteLine($"{item.FoodItem.ItemName, -10}: {item.QtyOrdered, 3} ${item.CalculateSubTotal(), -10}");
+            }
+        }
 
-
-
+        public override string ToString()
+        {
+            return $"ID: {OrderID} order date and time: {OrderDateTime} Order total: ${OrderTotal} Order status: {OrderStatus} Delivery date and time: {DeliveryDateTime} Delivery Address: {DeliveryAddress} Payment method: {OrderPaymentMethod}";
+        }
     }
 
 }
