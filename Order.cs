@@ -23,13 +23,11 @@ namespace FirasTimothy_PRG2Assignment
         public bool OrderPaid { get; set; }
         public List<OrderedFoodItem> orderedItems { get; set; }
 
-        public Order() { }
-
         public Order(int orderid, DateTime orderdatetime, double ordertotal, string orderstatus, DateTime deliverydatetime, string deliveryaddress, string orderpaymentmethod, bool orderpaid)
         {
             OrderID = orderid;
             OrderDateTime = orderdatetime;
-            OrderTotal = 0;
+            OrderTotal = ordertotal;
             OrderStatus = orderstatus;
             DeliveryDateTime = deliverydatetime;
             DeliveryAddress = deliveryaddress;
@@ -55,7 +53,7 @@ namespace FirasTimothy_PRG2Assignment
         {
             if (orderedItems.Remove(item))
             {
-                orderedItems.Remove(item);
+                CalculateOrderTotal();
                 return true;
             }
             else

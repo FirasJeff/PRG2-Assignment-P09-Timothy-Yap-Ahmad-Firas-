@@ -12,7 +12,7 @@ namespace FirasTimothy_PRG2Assignment
         public string CustomerName { get; set; }
         public List<Order> orders { get; set; }
         public Customer() { }
-        public Customer(string emailAddress, string customerName, Order customerorder)
+        public Customer(string emailAddress, string customerName)
         {
             EmailAddress = emailAddress;
             CustomerName = customerName;
