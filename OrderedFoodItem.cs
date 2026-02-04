@@ -11,24 +11,25 @@ using System.Threading.Tasks;
 
 namespace FirasTimothy_PRG2Assignment
 {
-    class OrderedFoodItem
+    public class OrderedFoodItem : FoodItem
     {
         public int QtyOrdered { get; set; }
         public double SubTotal { get; set; }
-        public FoodItem FoodItem { get; set; }
         public OrderedFoodItem() { }
-        public OrderedFoodItem(int qtyOrdered, double subTotal, FoodItem fooditem)
+        public OrderedFoodItem(string itemName, string itemDesc, double itemPrice, string customise, int qtyOrdered) : base(itemName, itemDesc, itemPrice, customise)
         {
             QtyOrdered = qtyOrdered;
-            SubTotal = subTotal;
-            FoodItem = fooditem;
+            CalculateSubtotal();
         }
         public double CalculateSubTotal()
         {
-            SubTotal = Convert.ToDouble(QtyOrdered) * FoodItem.ItemPrice;
+            SubTotal = Convert.ToDouble(QtyOrdered) * ItemPrice;
             return SubTotal;
         }
-
+        public override string ToString()
+        {
+            return base.ToString() + $", Quantity: {QtyOrdered}, Subtotal: ${SubTotal:F2}";
+        }
     }
 
 }

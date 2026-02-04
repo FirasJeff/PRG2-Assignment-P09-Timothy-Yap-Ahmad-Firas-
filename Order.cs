@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FirasTimothy_PRG2Assignment
 {
-    class Order
+    public class Order
     {
         public int OrderID { get; set; }
         public DateTime OrderDateTime { get; set; }

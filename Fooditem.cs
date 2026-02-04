@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FirasTimothy_PRG2Assignment
 {
-    class FoodItem
+    public class FoodItem
     {
         public string ItemName { get; set; }
         public string ItemDesc { get; set; }
