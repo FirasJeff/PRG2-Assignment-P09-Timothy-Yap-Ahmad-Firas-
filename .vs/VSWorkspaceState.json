@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\bin",
+    "\\bin\\Debug",
+    "\\bin\\Debug\\net8.0"
   ],
-  "SelectedNode": "\\Customer.cs",
+  "SelectedNode": "\\Restaurant.cs",
   "PreviewInSolutionExplorer": false
 }

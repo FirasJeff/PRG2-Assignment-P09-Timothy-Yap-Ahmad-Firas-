@@ -1,10 +1,11 @@
-﻿namespace FirasTimothy_PRG2Assignment
+﻿using FirasTimothy_PRG2Assignment;
+string[] restaurantfile = File.ReadAllLines("restaurants.csv");
+
+for(int i = 1; i<restaurantfile.Length; i++)
 {
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello, World!");
-        }
-    }
+    string lines[] = restaurantfile[i].Split(",");
+
 }
+
+string[] fooditemsfile = File.ReadAllLines("fooditems.csv");
+

@@ -19,13 +19,14 @@ namespace FirasTimothy_PRG2Assignment
         public OrderedFoodItem(string itemName, string itemDesc, double itemPrice, string customise, int qtyOrdered) : base(itemName, itemDesc, itemPrice, customise)
         {
             QtyOrdered = qtyOrdered;
-            CalculateSubtotal();
         }
+
         public double CalculateSubTotal()
         {
             SubTotal = Convert.ToDouble(QtyOrdered) * ItemPrice;
             return SubTotal;
         }
+
         public override string ToString()
         {
             return base.ToString() + $", Quantity: {QtyOrdered}, Subtotal: ${SubTotal:F2}";

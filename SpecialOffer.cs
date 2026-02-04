@@ -37,7 +37,7 @@ namespace FirasTimothy_PRG2Assignment
             offerDesc = OfferDesc;
             discount = Discount;
         }
-        public ovveride string ToString()
+        public override string ToString()
         {
             return $"Offer Code: {offerCode}, Description: {offerDesc}, Discount: {discount}%";
         }

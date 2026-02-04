@@ -66,7 +66,7 @@ namespace FirasTimothy_PRG2Assignment
             Console.WriteLine("Ordered food items \n==================");
             foreach (var item in orderedItems)
             {
-                Console.WriteLine($"{item.FoodItem.ItemName, -10}: {item.QtyOrdered, 3} ${item.CalculateSubTotal(), -10}");
+                Console.WriteLine($"{item.ItemName, -10}: {item.QtyOrdered, 3} ${item.CalculateSubTotal(), -10}");
             }
         }
 

@@ -1,0 +1,15 @@
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.AssemblyInfoInputs.cache
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.AssemblyInfo.cs
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.csproj.CoreCompileInputs.cache
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.sourcelink.json
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\bin\Debug\net8.0\FirasTimothy_PRG2Assignment.exe
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\bin\Debug\net8.0\FirasTimothy_PRG2Assignment.deps.json
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\bin\Debug\net8.0\FirasTimothy_PRG2Assignment.runtimeconfig.json
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\bin\Debug\net8.0\FirasTimothy_PRG2Assignment.dll
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\bin\Debug\net8.0\FirasTimothy_PRG2Assignment.pdb
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.dll
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\refint\FirasTimothy_PRG2Assignment.dll
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.pdb
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\FirasTimothy_PRG2Assignment.genruntimeconfig.cache
+C:\Users\timot\Desktop\PRGII_ASG\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\obj\Debug\net8.0\ref\FirasTimothy_PRG2Assignment.dll
