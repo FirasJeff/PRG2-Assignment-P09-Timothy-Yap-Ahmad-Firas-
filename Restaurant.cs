@@ -19,6 +19,7 @@ namespace FirasTimothy_PRG2Assignment
         private List<Order> orders;
         private List<Menu> menus;
         private List<SpecialOffer> specialOffers;
+        private Queue<Order> restaurantqueue;
         public string RestaurantId
         {
             get { return restaurantId; }
@@ -42,6 +43,7 @@ namespace FirasTimothy_PRG2Assignment
             orders = new List<Order>();
             menus = new List<Menu>();
             specialOffers = new List<SpecialOffer>();
+            restaurantqueue = new Queue<Order>();
         }
         public void DisplayOrders()
         {
@@ -50,7 +52,9 @@ namespace FirasTimothy_PRG2Assignment
             { 
                 Console.WriteLine("No orders received."); return; 
             }
-            for (int i = 0; i < orders.Count; i++) { Console.WriteLine($"{i + 1}. {orders[i]}"); }
+            for (int i = 0; i < orders.Count; i++) { 
+                Console.WriteLine($"{i + 1}. {orders[i]}"); 
+            }
         }
         public void DisplaySpecialOffers()
         {
@@ -118,6 +122,18 @@ namespace FirasTimothy_PRG2Assignment
         public List<Order> GetOrders() 
         { 
             return orders; 
+        }
+        public void AddQueue(Order order)
+        {
+            restaurantqueue.Enqueue(order);
+        }
+        public Order RemoveQueue()
+        {
+            if (restaurantqueue.Count > 0)
+            {
+                return restaurantqueue.Dequeue();
+            }
+            return null;
         }
         public override string ToString() 
         { 
