@@ -79,7 +79,7 @@ int GetNextOrderId(List<Customer> customerlist)
     int maxid = 0;
     foreach (Customer customer in customerlist)
     {
-        foreach (Order order in customer.GetOrders())
+        foreach (Order order in customer.orders)
         {
             if (order.OrderID > maxid)
             {
@@ -188,7 +188,7 @@ void NewOrder()
                     specialrequest = Console.ReadLine();
                     foreach (OrderedFoodItem item in norder.orderedItems)
                     {
-                        item.SpecialRequest = specialrequest;
+                        item.Customise = specialrequest;
                     }
                     break;
                 }
@@ -280,9 +280,9 @@ void NewOrder()
 
 
 Console.WriteLine("Welcome to the Gruberoo Food Delivery System 15 restaurants loaded! \r\n51 food items loaded! \r\n20 customers loaded! \r\n35 orders loaded! \r\n");
-Console.WriteLine("===== Gruberoo Food Delivery System ===== \r\n1.\tList all restaurants and menu items \r\n2.\tList all orders \r\n3.\tCreate a new order \r\n4.\tProcess an order \r\n5.\tModify an existing order \r\n6.\tDelete an existing order \r\n0.\tExit");
 while (true)
 {
+    Console.WriteLine("===== Gruberoo Food Delivery System ===== \r\n1.\tList all restaurants and menu items \r\n2.\tList all orders \r\n3.\tCreate a new order \r\n4.\tProcess an order \r\n5.\tModify an existing order \r\n6.\tDelete an existing order \r\n0.\tExit");
     Console.Write("Enter your choice: ");
     string option = Console.ReadLine();
     if (option == "1")
