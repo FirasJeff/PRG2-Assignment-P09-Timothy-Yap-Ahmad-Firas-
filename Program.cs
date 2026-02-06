@@ -46,18 +46,29 @@ for (int i = 1; i < customerfiles.Length; i++)
     string[] lines = customerfiles[i].Split(",");
     customerlist.Add(new Customer(lines[1], lines[0]));
 }
-
 string[] orderfiles = File.ReadAllLines("orders.csv");
 Stack<Order> refundStack = new Stack<Order>();
 for (int i = 1; i < orderfiles.Length; i++)
 {
-    string[] lines = orderfiles[i].Split(",");
+    string line = orderfiles[i];
+    bool inQuotes = false;
+    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+    for (int j = 0; j < line.Length; j++)
+    {
+        char c = line[j];
+        if (c == '"') inQuotes = !inQuotes;
+        else if (c == ',' && inQuotes) sb.Append('|');  
+        else sb.Append(c);
+    }
+    string[] lines = sb.ToString().Split(',');
+    if (lines.Length > 9)
+    {
+        lines[9] = lines[9].Replace('|', ',');
+    }
     DateTime deliveryDate = DateTime.ParseExact(lines[3], "dd/MM/yyyy", null);
     TimeSpan deliveryTime = TimeSpan.Parse(lines[4]);
     DateTime deliveryDateTime = deliveryDate.Add(deliveryTime);
     Order o = new Order(Convert.ToInt32(lines[0]), Convert.ToDateTime(lines[6]), Convert.ToDouble(lines[7]), lines[8], deliveryDateTime, lines[5], "", false);
-
-    // Load ordered items if present in CSV (column 9+)
     if (lines.Length > 9 && !string.IsNullOrEmpty(lines[9]))
     {
         string itemsData = lines[9].Trim('"');
@@ -69,8 +80,6 @@ for (int i = 1; i < orderfiles.Length; i++)
             {
                 string itemName = itemParts[0].Trim();
                 int qty = Convert.ToInt32(itemParts[1].Trim());
-
-                // Find the food item details from restaurant
                 foreach (Restaurant r in restaurantlist)
                 {
                     if (lines[2] == r.RestaurantId)
@@ -107,8 +116,7 @@ for (int i = 1; i < orderfiles.Length; i++)
         }
     }
 }
-
-//Timothy (S10268547H)-------------------------BASIC FEATURE 3-----------------------------------------------------------------------------------------
+//Timothy(S10268547H)------------------------ - BASIC FEATURE 3-----------------------------------------------------------------------------------------
 void ShowAllRestaurants()
 {
     Console.WriteLine("All Restaurants and Menu Items");
@@ -124,7 +132,6 @@ void ShowAllRestaurants()
         Console.WriteLine();
     }
 }
-
 //Firas (S10273408F)-------------------------BASIC FEATURE 4-----------------------------------------------------------------------------------------
 void ListAllOrders()
 {
@@ -492,6 +499,153 @@ void ProcessOrder()
 }
 
 //Timothy (S10273408F)-------------------------BASIC FEATURE 7-----------------------------------------------------------------------------------------
+void ModifyingOrder()
+{
+    Console.WriteLine("Modify Order");
+    Console.WriteLine("============");
+    Customer modifycustomer = null;
+    while (modifycustomer == null)
+    {
+        Console.Write("Enter Customer Email: ");
+        string customeremail = Console.ReadLine();
+
+        foreach (Customer c in customerlist)
+        {
+            if (customeremail == c.EmailAddress)
+            {
+                modifycustomer = c;
+                break;
+            }
+        }
+        if (modifycustomer == null)
+        {
+            Console.WriteLine("Customer email does not exist");
+        }
+    }
+    Console.WriteLine("Pending Orders: ");
+    List<Order> pendingorders = new List<Order>();
+    foreach (Order o in modifycustomer.orders)
+    {
+        if (o.OrderStatus.Contains("Pending")) 
+        {
+            Console.WriteLine(o.OrderID);
+            pendingorders.Add(o);
+        }
+    }
+    if (pendingorders.Count == 0)
+    {
+        Console.WriteLine("No pending orders found.");
+        return;
+    }
+    Order selectedorder = null;
+    while (selectedorder == null)
+    {
+        Console.Write("Enter Order ID: ");
+        int orderid = Convert.ToInt32(Console.ReadLine());
+
+        foreach (Order o in pendingorders)
+        {
+            if (orderid == o.OrderID)
+            {
+                selectedorder = o;
+                break;
+            }
+        }
+
+        if (selectedorder == null)
+        {
+            Console.WriteLine("Please enter a valid pending order ID");
+        }
+    }
+    Console.WriteLine("Order Items:");
+    int count = 1;
+    foreach (OrderedFoodItem o in selectedorder.orderedItems)
+    {
+        Console.WriteLine($"{count}. {o.ItemName} - {o.QtyOrdered}");
+        count++;
+    }
+    Console.WriteLine("Address:");
+    Console.WriteLine(selectedorder.DeliveryAddress);
+    Console.WriteLine("Delivery Date/Time:");
+    Console.WriteLine($"{selectedorder.DeliveryDateTime:d/M/yyyy}, {selectedorder.DeliveryDateTime:HH:mm}");
+    Console.Write("\nModify: [1] Items [2] Address [3] Delivery Time: ");
+    string modifyoption = Console.ReadLine();
+    foreach (OrderedFoodItem item in selectedorder.orderedItems)
+    {
+        Console.WriteLine($"  - {item.ItemName}: {item.QtyOrdered}");
+    }
+
+    if (modifyoption == "3")  
+    {
+        Console.Write("Enter new Delivery Time (hh:mm): ");
+        string newtimestr = Console.ReadLine();
+        try
+        {
+            TimeSpan newtime = TimeSpan.Parse(newtimestr);
+            DateTime newdeliverydatetime = selectedorder.DeliveryDateTime.Date.Add(newtime);
+            selectedorder.DeliveryDateTime = newdeliverydatetime;
+            Console.WriteLine($"Order {selectedorder.OrderID} updated. New Delivery Time: {newtimestr}");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Invalid time format. Update cancelled.");
+        }
+    }
+    else if (modifyoption == "1")
+    {
+        OrderedFoodItem selectedfooditem = null; 
+        while (selectedfooditem == null)
+        {
+            Console.Write("Enter index of food item from above (e.g 1): ");
+            int indexfood = Convert.ToInt32(Console.ReadLine());
+            if (indexfood > selectedorder.orderedItems.Count || indexfood < 1)
+            {
+                Console.WriteLine("Enter a valid food item index");
+            }
+            else
+            {
+                selectedfooditem = selectedorder.orderedItems[indexfood - 1];
+                break;
+            }
+        }
+        double initialtotal = selectedfooditem.CalculateSubTotal();
+        Console.Write("Enter new quantity: ");
+        int newquantity = Convert.ToInt32(Console.ReadLine());
+        Console.WriteLine("Item quantity updated successfully!");
+        selectedfooditem.QtyOrdered = newquantity;
+        double newtotal = selectedorder.CalculateOrderTotal();
+        double difftopay = newtotal - initialtotal;
+        if (difftopay > 0)
+        {
+            Console.WriteLine($"You have to pay an extra ${difftopay} ");
+            string paymentMethod = "";
+            while (true)
+            {
+                Console.Write("Payment method:\n[CC] Credit Card / [PP] PayPal / [CD] Cash on Delivery: ");
+                paymentMethod = Console.ReadLine().ToUpper();
+                if (paymentMethod == "CC" || paymentMethod == "PP" || paymentMethod == "CD")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Enter a valid option (CC, PP, or CD)");
+                }
+            }
+        }
+    }
+    else if (modifyoption == "2")
+    {
+        Console.Write("Enter new delivery address: ");
+        string newAddress = Console.ReadLine();
+        selectedorder.DeliveryAddress = newAddress;
+        Console.WriteLine("Address updated successfully!");
+    }
+    else
+    {
+        Console.WriteLine("Invalid option.");
+    }
+}
 
 
 //Firas (S10273408F)-------------------------BASIC FEATURE 8-----------------------------------------------------------------------------------------
@@ -697,7 +851,7 @@ while (true)
     }
     else if (option == "5")
     {
-        Console.WriteLine("Timothy waiting for you my man");
+        ModifyingOrder();
     }
     else if (option == "6")
     {
