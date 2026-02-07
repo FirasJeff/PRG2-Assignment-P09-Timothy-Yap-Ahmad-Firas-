@@ -46,48 +46,55 @@ for (int i = 1; i < customerfiles.Length; i++)
     string[] lines = customerfiles[i].Split(",");
     customerlist.Add(new Customer(lines[1], lines[0]));
 }
+
 string[] orderfiles = File.ReadAllLines("orders.csv");
 Stack<Order> refundStack = new Stack<Order>();
 for (int i = 1; i < orderfiles.Length; i++)
 {
     string line = orderfiles[i];
-    bool inQuotes = false;
-    System.Text.StringBuilder sb = new System.Text.StringBuilder();
-    for (int j = 0; j < line.Length; j++)
+    string[] parts = line.Split(',');
+    // If we have more than 10 parts, join the extra parts back to [9]
+    if (parts.Length > 10)
     {
-        char c = line[j];
-        if (c == '"') inQuotes = !inQuotes;
-        else if (c == ',' && inQuotes) sb.Append('|');  
-        else sb.Append(c);
+        string itemsfield = parts[9];
+        for (int j = 10; j < parts.Length; j++)
+        {
+            itemsfield += "," + parts[j];
+        }
+        parts[9] = itemsfield;
+        string[] newparts = new string[10];
+        for (int j = 0; j < 10; j++)
+        {
+            newparts[j] = parts[j];
+        }
+        parts = newparts;
     }
-    string[] lines = sb.ToString().Split(',');
-    if (lines.Length > 9)
-    {
-        lines[9] = lines[9].Replace('|', ',');
-    }
-    DateTime deliveryDate = DateTime.ParseExact(lines[3], "dd/MM/yyyy", null);
-    TimeSpan deliveryTime = TimeSpan.Parse(lines[4]);
+
+    DateTime deliveryDate = DateTime.ParseExact(parts[3], "dd/MM/yyyy", null);
+    TimeSpan deliveryTime = TimeSpan.Parse(parts[4]);
     DateTime deliveryDateTime = deliveryDate.Add(deliveryTime);
-    Order o = new Order(Convert.ToInt32(lines[0]), Convert.ToDateTime(lines[6]), Convert.ToDouble(lines[7]), lines[8], deliveryDateTime, lines[5], "", false);
-    if (lines.Length > 9 && !string.IsNullOrEmpty(lines[9]))
+    Order o = new Order(Convert.ToInt32(parts[0]), Convert.ToDateTime(parts[6]), Convert.ToDouble(parts[7]), parts[8], deliveryDateTime, parts[5], "", false);
+
+    string itemsdata = parts[9].Trim('"');
+    if (!string.IsNullOrEmpty(itemsdata))
     {
-        string itemsData = lines[9].Trim('"');
-        string[] items = itemsData.Split('|');
+        string[] items = itemsdata.Split('|');
         foreach (string item in items)
         {
-            string[] itemParts = item.Split(',');
-            if (itemParts.Length >= 2)
+            string[] itemparts = item.Split(',');
+            if (itemparts.Length >= 2)
             {
-                string itemName = itemParts[0].Trim();
-                int qty = Convert.ToInt32(itemParts[1].Trim());
+                string itemname = itemparts[0].Trim();
+                int qty = Convert.ToInt32(itemparts[1].Trim());
+
                 foreach (Restaurant r in restaurantlist)
                 {
-                    if (lines[2] == r.RestaurantId)
+                    if (parts[2] == r.RestaurantId)
                     {
                         Menu menu = r.GetMenus()[0];
                         foreach (FoodItem f in menu.GetFoodItems())
                         {
-                            if (f.ItemName == itemName)
+                            if (f.ItemName == itemname)
                             {
                                 o.AddOrderedFoodItem(new OrderedFoodItem(f.ItemName, f.ItemDesc, f.ItemPrice, "", qty));
                                 break;
@@ -102,14 +109,14 @@ for (int i = 1; i < orderfiles.Length; i++)
 
     foreach (Customer c in customerlist)
     {
-        if (lines[1] == c.EmailAddress)
+        if (parts[1] == c.EmailAddress)
         {
             c.AddOrder(o);
         }
     }
     foreach (Restaurant r in restaurantlist)
     {
-        if (lines[2] == r.RestaurantId)
+        if (parts[2] == r.RestaurantId)
         {
             r.AddQueue(o);
             r.AddOrder(o);
