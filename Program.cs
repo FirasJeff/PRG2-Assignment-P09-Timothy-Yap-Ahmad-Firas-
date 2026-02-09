@@ -163,7 +163,7 @@ void ListAllOrders()
                         break;
                     }
                 }
-                if (restaurantName != "") 
+                if (restaurantName != "")
                     break;
             }
 
@@ -412,8 +412,8 @@ void ProcessOrder()
     List<Order> processedOrders = new List<Order>();
     foreach (Order order in ordersList)
     {
-        if (processedOrders.Contains(order)) 
-           continue;
+        if (processedOrders.Contains(order))
+            continue;
 
         Console.WriteLine($"Order {order.OrderID}:");
 
@@ -429,7 +429,7 @@ void ProcessOrder()
                     break;
                 }
             }
-            if (customerName != "") 
+            if (customerName != "")
                 break;
         }
 
@@ -533,7 +533,7 @@ void ModifyingOrder()
     List<Order> pendingorders = new List<Order>();
     foreach (Order o in modifycustomer.orders)
     {
-        if (o.OrderStatus.Contains("Pending")) 
+        if (o.OrderStatus.Contains("Pending"))
         {
             Console.WriteLine(o.OrderID);
             pendingorders.Add(o);
@@ -578,7 +578,7 @@ void ModifyingOrder()
     Console.Write("\nModify: [1] Items [2] Address [3] Delivery Time: ");
     string modifyoption = Console.ReadLine();
 
-    if (modifyoption == "3")  
+    if (modifyoption == "3")
     {
         Console.Write("Enter new Delivery Time (hh:mm): ");
         string newtimestr = Console.ReadLine();
@@ -596,7 +596,7 @@ void ModifyingOrder()
     }
     else if (modifyoption == "1")
     {
-        OrderedFoodItem selectedfooditem = null; 
+        OrderedFoodItem selectedfooditem = null;
         while (selectedfooditem == null)
         {
             Console.Write("Enter index of food item from above (e.g 1): ");
@@ -743,6 +743,187 @@ void DeleteExistingOrder()
     }
 }
 
+//Firas (S10273408F)-------------------------ADVANCED FEATURE B-----------------------------------------------------------------------------------------
+void DisplayTotalOrderAmount()
+{
+    Console.WriteLine("Total Order Amount Summary");
+    Console.WriteLine("==========================");
+    Console.WriteLine();
+
+    double grandTotalOrderAmount = 0;
+    double grandTotalRefunds = 0;
+    const double delivery_fee = 5.00;
+    const double grueberoo_commision = 0.30; 
+
+    // Process each restaurant
+    foreach (Restaurant restaurant in restaurantlist)
+    {
+        Console.WriteLine($"Restaurant: {restaurant.RestaurantName} ({restaurant.RestaurantId})");
+        Console.WriteLine(new string('-', 60));
+
+        double restaurantTotalDelivered = 0;
+        double restaurantTotalRefunds = 0;
+        int deliveredCount = 0;
+        int refundedCount = 0;
+
+        // Get all orders for this restaurant
+        List<Order> restaurantOrders = restaurant.GetOrders();
+
+        // Process delivered orders
+        foreach (Order order in restaurantOrders)
+        {
+            if (order.OrderStatus == "Delivered")
+            {
+                // Subtract delivery fee from order total
+                double orderAmountMinusDelivery = order.OrderTotal - delivery_fee;
+                restaurantTotalDelivered += orderAmountMinusDelivery;
+                deliveredCount++;
+            }
+        }
+
+        // Process refunded orders from the refund stack
+        foreach (Order order in refundStack)
+        {
+            // Find if this order belongs to current restaurant
+            bool belongsToRestaurant = false;
+            foreach (Order rOrder in restaurantOrders)
+            {
+                if (rOrder.OrderID == order.OrderID)
+                {
+                    belongsToRestaurant = true;
+                    break;
+                }
+            }
+
+            if (belongsToRestaurant)
+            {
+                restaurantTotalRefunds += order.OrderTotal;
+                refundedCount++;
+            }
+        }
+
+        // Display restaurant summary
+        Console.WriteLine($"  Delivered Orders: {deliveredCount}");
+        Console.WriteLine($"  Total Order Amount (less delivery fee): ${restaurantTotalDelivered:F2}");
+        Console.WriteLine($"  Refunded Orders: {refundedCount}");
+        Console.WriteLine($"  Total Refunds: ${restaurantTotalRefunds:F2}");
+        Console.WriteLine();
+
+        grandTotalOrderAmount += restaurantTotalDelivered;
+        grandTotalRefunds += restaurantTotalRefunds;
+    }
+
+    // Display overall summary
+    Console.WriteLine(new string('=', 60));
+    Console.WriteLine("OVERALL SUMMARY");
+    Console.WriteLine(new string('=', 60));
+    Console.WriteLine($"Total Order Amount (all restaurants): ${grandTotalOrderAmount:F2}");
+    Console.WriteLine($"Total Refunds (all restaurants): ${grandTotalRefunds:F2}");
+    Console.WriteLine();
+
+    // Calculate Gruberoo's earnings (30% commission on delivered orders)
+    double gruberooEarnings = grandTotalOrderAmount * grueberoo_commision;
+    Console.WriteLine($"Gruberoo Commission (30%): ${gruberooEarnings:F2}");
+    Console.WriteLine(new string('=', 60));
+}
+
+
+//Firas (S10273408F)-------------------------BONUS FEATURE - Auto Assign Drivers-----------------------------------------------------------------------------------------
+//This bonus feature automatically assigns delivery drivers from a list of available drivers to orders that are in "Preparing" status.//
+void AutoAssignDrivers()
+{
+    Console.WriteLine("Auto Assign Drivers to Orders");
+    Console.WriteLine("==============================");
+    Console.WriteLine();
+
+    // Simple driver pool
+    List<string> availableDrivers = new List<string>
+    {
+        "John Tan", "Sarah Lee", "Ahmad Rahman", "Wei Ming", "Priya Kumar",
+        "David Wong", "Lisa Chen", "Kumar Singh", "Michelle Ng", "Ali Hassan"
+    };
+
+    int assignedCount = 0;
+    int noPreparingOrders = 0;
+    Random random = new Random();
+
+    // Process each restaurant
+    foreach (Restaurant restaurant in restaurantlist)
+    {
+        List<Order> restaurantOrders = restaurant.GetOrders();
+        bool hasPreparingOrders = false;
+
+        foreach (Order order in restaurantOrders)
+        {
+            // Only assign drivers to "Preparing" orders
+            if (order.OrderStatus == "Preparing")
+            {
+                if (!hasPreparingOrders)
+                {
+                    Console.WriteLine($"Restaurant: {restaurant.RestaurantName} ({restaurant.RestaurantId})");
+                    Console.WriteLine(new string('-', 60));
+                    hasPreparingOrders = true;
+                }
+
+                // Assign a random driver from the pool
+                int driverIndex = random.Next(availableDrivers.Count);
+                string assignedDriver = availableDrivers[driverIndex];
+
+                // Find customer for this order
+                string customerName = "";
+                foreach (Customer c in customerlist)
+                {
+                    foreach (Order o in c.orders)
+                    {
+                        if (o.OrderID == order.OrderID)
+                        {
+                            customerName = c.CustomerName;
+                            break;
+                        }
+                    }
+                    if (customerName != "") break;
+                }
+
+                Console.WriteLine($"  Order {order.OrderID}:");
+                Console.WriteLine($"    Customer: {customerName}");
+                Console.WriteLine($"    Delivery Time: {order.DeliveryDateTime:dd/MM/yyyy HH:mm}");
+                Console.WriteLine($"    Address: {order.DeliveryAddress}");
+                Console.WriteLine($"    Amount: ${order.OrderTotal:F2}");
+                Console.WriteLine($"    ✓ Assigned Driver: {assignedDriver}");
+                Console.WriteLine();
+                assignedCount++;
+            }
+        }
+
+        if (hasPreparingOrders)
+        {
+            Console.WriteLine();
+        }
+        else
+        {
+            noPreparingOrders++;
+        }
+    }
+
+    // Display summary
+    Console.WriteLine(new string('=', 60));
+    Console.WriteLine("DRIVER ASSIGNMENT SUMMARY");
+    Console.WriteLine(new string('=', 60));
+    Console.WriteLine($"Total orders assigned to drivers: {assignedCount}");
+    Console.WriteLine($"Available drivers in pool: {availableDrivers.Count}");
+    Console.WriteLine(new string('=', 60));
+
+    if (assignedCount > 0)
+    {
+        Console.WriteLine("\n All drivers have been notified.");
+        Console.WriteLine(" Orders will be picked up and delivered on schedule.");
+    }
+    else
+    {
+        Console.WriteLine("No orders currently in 'Preparing' status.");
+        Console.WriteLine("Use option 4 to process pending orders first.");
+    }
+}
 void SaveQueueAndStack()
 {
     // Save queue data
@@ -831,6 +1012,8 @@ while (true)
     Console.WriteLine("4.\tProcess an order");
     Console.WriteLine("5.\tModify an existing order");
     Console.WriteLine("6.\tDelete an existing order");
+    Console.WriteLine("7.\tDisplay total order amount (Advanced Feature)");
+    Console.WriteLine("8.\tAuto assign drivers to orders (Bonus Feature)");
     Console.WriteLine("0.\tExit");
     Console.Write("Enter your choice: ");
     string option = Console.ReadLine();
@@ -859,6 +1042,14 @@ while (true)
     else if (option == "6")
     {
         DeleteExistingOrder();
+    }
+    else if (option == "7")
+    {
+        DisplayTotalOrderAmount();
+    }
+    else if (option == "8")
+    {
+        AutoAssignDrivers();
     }
     else if (option == "0")
     {
