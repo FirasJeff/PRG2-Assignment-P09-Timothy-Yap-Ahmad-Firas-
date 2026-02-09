@@ -577,10 +577,6 @@ void ModifyingOrder()
     Console.WriteLine($"{selectedorder.DeliveryDateTime:d/M/yyyy}, {selectedorder.DeliveryDateTime:HH:mm}");
     Console.Write("\nModify: [1] Items [2] Address [3] Delivery Time: ");
     string modifyoption = Console.ReadLine();
-    foreach (OrderedFoodItem item in selectedorder.orderedItems)
-    {
-        Console.WriteLine($"  - {item.ItemName}: {item.QtyOrdered}");
-    }
 
     if (modifyoption == "3")  
     {
