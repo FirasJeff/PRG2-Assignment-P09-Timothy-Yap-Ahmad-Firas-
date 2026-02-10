@@ -1024,6 +1024,7 @@ void DisplayTotalOrderAmount()
         {
             if (order.OrderStatus == "Delivered")
             {
+                // OrderTotal is already less delivery fee
                 restaurantTotalDelivered += order.OrderTotal;
                 deliveredCount++;
             }
@@ -1034,23 +1035,24 @@ void DisplayTotalOrderAmount()
             }
         }
 
-        
+        //DISPLAY PER RESTAURANT
         Console.WriteLine($"Delivered Orders: {deliveredCount}");
         Console.WriteLine($"Total Order Amount (less delivery fee): ${restaurantTotalDelivered:F2}");
         Console.WriteLine($"Refunded Orders: {refundedCount}");
         Console.WriteLine($"Total Refunds: ${restaurantTotalRefunds:F2}");
         Console.WriteLine();
 
-       
+        // Add to grand totals
         grandTotalOrderAmount += restaurantTotalDelivered;
         grandTotalRefunds += restaurantTotalRefunds;
         grandDeliveredCount += deliveredCount;
     }
 
-  
+    // OVERALL SUMMARY
     Console.WriteLine(new string('=', 60));
     Console.WriteLine("OVERALL SUMMARY");
     Console.WriteLine(new string('=', 60));
+
     Console.WriteLine($"Total Order Amount (all restaurants): ${grandTotalOrderAmount:F2}");
     Console.WriteLine($"Total Refunds (all restaurants): ${grandTotalRefunds:F2}");
     Console.WriteLine();
@@ -1063,6 +1065,7 @@ void DisplayTotalOrderAmount()
     Console.WriteLine($"Final Amount Gruberoo Earns: ${gruberooEarnings:F2}");
     Console.WriteLine(new string('=', 60));
 }
+
 
 
 
