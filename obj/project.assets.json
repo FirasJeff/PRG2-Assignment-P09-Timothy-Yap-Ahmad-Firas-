@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\FirasJeff\\Desktop\\repo\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
+      "projectUniqueName": "C:\\Users\\FirasJeff\\Desktop\\PROGRAMMING ASSIGNMENT\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
       "projectName": "FirasTimothy_PRG2Assignment",
-      "projectPath": "C:\\Users\\FirasJeff\\Desktop\\repo\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
+      "projectPath": "C:\\Users\\FirasJeff\\Desktop\\PROGRAMMING ASSIGNMENT\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
       "packagesPath": "C:\\Users\\FirasJeff\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\FirasJeff\\Desktop\\repo\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\obj\\",
+      "outputPath": "C:\\Users\\FirasJeff\\Desktop\\PROGRAMMING ASSIGNMENT\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\FirasJeff\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -46,7 +46,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -62,30 +62,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.23, 8.0.23]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.23, 8.0.23]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.23, 8.0.23]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.23, 8.0.23]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

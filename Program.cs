@@ -213,17 +213,17 @@ bool CheckIfPublicHoliday(DateTime date)
 {
     List<DateTime> publicHolidays = new List<DateTime>
     {
-        new DateTime(date.Year, 1, 1),   
-        new DateTime(date.Year, 2, 17),  
-        new DateTime(date.Year, 2, 18),  
-        new DateTime(date.Year, 4, 3),   
-        new DateTime(date.Year, 4, 21),  
-        new DateTime(date.Year, 5, 1),   
-        new DateTime(date.Year, 5, 10), 
-        new DateTime(date.Year, 6, 8),   
-        new DateTime(date.Year, 8, 9),   
-        new DateTime(date.Year, 11, 6),  
-        new DateTime(date.Year, 12, 25) 
+        new DateTime(date.Year, 1, 1),
+        new DateTime(date.Year, 2, 17),
+        new DateTime(date.Year, 2, 18),
+        new DateTime(date.Year, 4, 3),
+        new DateTime(date.Year, 4, 21),
+        new DateTime(date.Year, 5, 1),
+        new DateTime(date.Year, 5, 10),
+        new DateTime(date.Year, 6, 8),
+        new DateTime(date.Year, 8, 9),
+        new DateTime(date.Year, 11, 6),
+        new DateTime(date.Year, 12, 25)
     };
 
     return publicHolidays.Contains(date.Date);
@@ -668,6 +668,7 @@ void ProcessOrder()
             {
                 order.OrderStatus = "Delivered";
                 Console.WriteLine($"Order {order.OrderID} delivered. Status: Delivered");
+                
             }
             else
             {
@@ -766,6 +767,7 @@ void ModifyingOrder()
             DateTime newDeliveryDateTime = selectedOrder.DeliveryDateTime.Date.Add(newTime);
             selectedOrder.DeliveryDateTime = newDeliveryDateTime;
             Console.WriteLine($"Order {selectedOrder.OrderID} updated. New Delivery Time: {newTimeStr}");
+            
         }
         catch (FormatException)
         {
@@ -814,6 +816,7 @@ void ModifyingOrder()
                 }
             }
         }
+
     }
     else if (modifyOption == "2")
     {
@@ -915,11 +918,13 @@ void DeleteExistingOrder()
         refundStack.Push(targetOrder);
         Console.WriteLine($"Order {targetOrder.OrderID} cancelled. Refund of ${targetOrder.OrderTotal:F2} processed.");
     }
+        
     else
     {
         Console.WriteLine("Deletion cancelled.");
     }
 }
+
 //Timothy (S10268547H)-------------------------ADVANCED FEATURE A---------------------------------------------------------------------------------------
 void BulkProcessPendingOrders()
 {
@@ -972,6 +977,7 @@ void BulkProcessPendingOrders()
     {
         Console.WriteLine("Percentage of automatically processed orders: 0.0%");
     }
+   
 }
 
 //Firas (S10273408F)-------------------------ADVANCED FEATURE B-----------------------------------------------------------------------------------------
@@ -983,78 +989,54 @@ void DisplayTotalOrderAmount()
 
     double grandTotalOrderAmount = 0;
     double grandTotalRefunds = 0;
-    const double deliveryFee = 5.00;
-    const double grueberooCommision = 0.30;
+    int grandDeliveredCount = 0;
 
-    // Process each restaurant
+    const double DELIVERY_FEE = 5.00;
+    const double GRUBEROO_COMMISSION = 0.30;
+
     foreach (Restaurant restaurant in restaurantList)
     {
-        Console.WriteLine($"Restaurant: {restaurant.RestaurantName} ({restaurant.RestaurantId})");
-        Console.WriteLine(new string('-', 60));
-
         double restaurantTotalDelivered = 0;
         double restaurantTotalRefunds = 0;
         int deliveredCount = 0;
         int refundedCount = 0;
 
-        // Get all orders for this restaurant
         List<Order> restaurantOrders = restaurant.GetOrders();
 
-        // Process delivered orders
         foreach (Order order in restaurantOrders)
         {
             if (order.OrderStatus == "Delivered")
             {
-                // Subtract delivery fee from order total
-                double orderAmountMinusDelivery = order.OrderTotal - deliveryFee;
-                restaurantTotalDelivered += orderAmountMinusDelivery;
+               
+                restaurantTotalDelivered += order.OrderTotal;
                 deliveredCount++;
             }
-        }
-
-        // Process refunded orders from the refund stack
-        foreach (Order order in refundStack)
-        {
-            // Find if this order belongs to current restaurant
-            bool belongsToRestaurant = false;
-            foreach (Order rOrder in restaurantOrders)
+            else if (order.OrderStatus == "Cancelled" || order.OrderStatus == "Rejected")
             {
-                if (rOrder.OrderID == order.OrderID)
-                {
-                    belongsToRestaurant = true;
-                    break;
-                }
-            }
-
-            if (belongsToRestaurant)
-            {
+               
                 restaurantTotalRefunds += order.OrderTotal;
                 refundedCount++;
             }
         }
 
-        // Display restaurant summary
-        Console.WriteLine($"  Delivered Orders: {deliveredCount}");
-        Console.WriteLine($"  Total Order Amount (less delivery fee): ${restaurantTotalDelivered:F2}");
-        Console.WriteLine($"  Refunded Orders: {refundedCount}");
-        Console.WriteLine($"  Total Refunds: ${restaurantTotalRefunds:F2}");
-        Console.WriteLine();
 
         grandTotalOrderAmount += restaurantTotalDelivered;
         grandTotalRefunds += restaurantTotalRefunds;
+        grandDeliveredCount += deliveredCount;
     }
 
-    // Display overall summary
+    // OVERALL SUMMARY
     Console.WriteLine(new string('=', 60));
     Console.WriteLine("OVERALL SUMMARY");
     Console.WriteLine(new string('=', 60));
     Console.WriteLine($"Total Order Amount (all restaurants): ${grandTotalOrderAmount:F2}");
     Console.WriteLine($"Total Refunds (all restaurants): ${grandTotalRefunds:F2}");
     Console.WriteLine();
+    double commissionEarnings = grandTotalOrderAmount * GRUBEROO_COMMISSION;
+    double deliveryEarnings = grandDeliveredCount * DELIVERY_FEE;
+    double gruberooEarnings = commissionEarnings + deliveryEarnings;
 
-    // Calculate Gruberoo's earnings (30% commission on delivered orders)
-    double gruberooEarnings = grandTotalOrderAmount * grueberooCommision;
-    Console.WriteLine($"Gruberoo Commission (30%): ${gruberooEarnings:F2}");
+    Console.WriteLine($"Final Amount Gruberoo Earns: ${gruberooEarnings:F2}");
     Console.WriteLine(new string('=', 60));
 }
 

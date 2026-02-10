@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0sC2575ZXYk=",
+  "dgSpecHash": "RD75rUvh/hA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\FirasJeff\\Desktop\\repo\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\FirasJeff\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.23\\microsoft.windowsdesktop.app.ref.8.0.23.nupkg.sha512",
-    "C:\\Users\\FirasJeff\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.23\\microsoft.netcore.app.ref.8.0.23.nupkg.sha512",
-    "C:\\Users\\FirasJeff\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.23\\microsoft.aspnetcore.app.ref.8.0.23.nupkg.sha512",
-    "C:\\Users\\FirasJeff\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.23\\microsoft.netcore.app.host.win-x64.8.0.23.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\FirasJeff\\Desktop\\PROGRAMMING ASSIGNMENT\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\FirasTimothy_PRG2Assignment.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
