@@ -5,6 +5,7 @@ OrderId,CustomerEmail,RestaurantId,DeliveryDate,DeliveryTime,DeliveryAddress,Tot
 1017,sharon.yeo@email.com,R001,29/01/2026,14:30,123 Orchard Road #05-01,23.8,Preparing
 1020,james.koh@email.com,R001,03/02/2026,13:15,246 Bedok South Ave 3 #09-01,36.5,Delivered
 1021,michael.wong@email.com,R001,22/01/2026,20:15,123 Orchard Road #05-01,36.4,Cancelled
+1036,alice.tan@email.com,R001,24/03/2026,12:00,jd,21.8,Pending
 1003,wendy.ong@email.com,R002,03/02/2026,19:30,789 Tampines Ave 5 #08-12,11.2,Preparing
 1006,michael.wong@email.com,R002,06/02/2026,12:00,987 Ang Mo Kio Ave 3 #06-15,32.7,Pending
 1016,james.koh@email.com,R002,16/01/2026,15:45,654 Jurong West St 42 #10-11,11.2,Preparing
