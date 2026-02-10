@@ -1007,8 +1007,12 @@ void DisplayTotalOrderAmount()
     const double DELIVERY_FEE = 5.00;
     const double GRUBEROO_COMMISSION = 0.30;
 
+    // Process each restaurant
     foreach (Restaurant restaurant in restaurantList)
     {
+        Console.WriteLine($"Restaurant: {restaurant.RestaurantName} ({restaurant.RestaurantId})");
+        Console.WriteLine(new string('-', 60));
+
         double restaurantTotalDelivered = 0;
         double restaurantTotalRefunds = 0;
         int deliveredCount = 0;
@@ -1020,31 +1024,38 @@ void DisplayTotalOrderAmount()
         {
             if (order.OrderStatus == "Delivered")
             {
-               
                 restaurantTotalDelivered += order.OrderTotal;
                 deliveredCount++;
             }
             else if (order.OrderStatus == "Cancelled" || order.OrderStatus == "Rejected")
             {
-               
                 restaurantTotalRefunds += order.OrderTotal;
                 refundedCount++;
             }
         }
 
+        
+        Console.WriteLine($"Delivered Orders: {deliveredCount}");
+        Console.WriteLine($"Total Order Amount (less delivery fee): ${restaurantTotalDelivered:F2}");
+        Console.WriteLine($"Refunded Orders: {refundedCount}");
+        Console.WriteLine($"Total Refunds: ${restaurantTotalRefunds:F2}");
+        Console.WriteLine();
 
+       
         grandTotalOrderAmount += restaurantTotalDelivered;
         grandTotalRefunds += restaurantTotalRefunds;
         grandDeliveredCount += deliveredCount;
     }
 
-    // OVERALL SUMMARY
+  
     Console.WriteLine(new string('=', 60));
     Console.WriteLine("OVERALL SUMMARY");
     Console.WriteLine(new string('=', 60));
     Console.WriteLine($"Total Order Amount (all restaurants): ${grandTotalOrderAmount:F2}");
     Console.WriteLine($"Total Refunds (all restaurants): ${grandTotalRefunds:F2}");
     Console.WriteLine();
+
+    // Gruberoo earnings = commission + delivery fees
     double commissionEarnings = grandTotalOrderAmount * GRUBEROO_COMMISSION;
     double deliveryEarnings = grandDeliveredCount * DELIVERY_FEE;
     double gruberooEarnings = commissionEarnings + deliveryEarnings;
@@ -1052,6 +1063,7 @@ void DisplayTotalOrderAmount()
     Console.WriteLine($"Final Amount Gruberoo Earns: ${gruberooEarnings:F2}");
     Console.WriteLine(new string('=', 60));
 }
+
 
 
 //Firas (S10273408F)-------------------------BONUS FEATURE - Auto Assign Drivers-----------------------------------------------------------------------------------------
