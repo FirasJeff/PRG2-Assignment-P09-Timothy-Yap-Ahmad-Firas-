@@ -13,9 +13,17 @@ namespace FirasTimothy_PRG2Assignment
 {
     public class SpecialOffer
     {
+        private string restaurant;
         private string offerCode;
         private string offerDesc;
         private double discount;
+
+        public string Restaurant
+        {
+            get { return restaurant; }
+            set { restaurant = value; }
+        }
+
         public string OfferCode
         {
             get { return offerCode; }
@@ -31,15 +39,12 @@ namespace FirasTimothy_PRG2Assignment
             get { return discount; }
             set { discount = value; }
         }
-        public SpecialOffer()
-        {
-            offerCode = OfferCode;
-            offerDesc = OfferDesc;
-            discount = Discount;
-        }
+
+        public SpecialOffer() { }
+
         public override string ToString()
         {
-            return $"Offer Code: {offerCode}, Description: {offerDesc}, Discount: {discount}%";
+            return $"Restaurant: {restaurant}, Offer Code: {offerCode}, Description: {offerDesc}, Discount: {discount}%";
         }
     }
 }

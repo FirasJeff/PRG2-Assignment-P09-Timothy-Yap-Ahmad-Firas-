@@ -38,6 +38,25 @@ for (int i = 1; i < foodItemsFile.Length; i++)
     }
 }
 
+string[] specialOffersFile = File.ReadAllLines("specialoffers.csv");
+List<SpecialOffer> specialOffers = new List<SpecialOffer>();
+for (int i = 1; i < specialOffersFile.Length; i++)
+{
+    string[] lines = specialOffersFile[i].Split(",");
+    double discount = 0;
+    if (lines[3] != "-")
+    {
+        discount = Convert.ToDouble(lines[3]);
+    }
+
+    specialOffers.Add(new SpecialOffer
+    {
+        Restaurant = lines[0],
+        OfferCode = lines[1],
+        OfferDesc = lines[2],
+        Discount = discount
+    });
+}
 //Timothy (S10268547H)-------------------------BASIC FEATURE 2-----------------------------------------------------------------------------------------
 string[] customerFiles = File.ReadAllLines("customers.csv");
 List<Customer> customerList = new List<Customer>();
@@ -190,6 +209,25 @@ int GetNextOrderId(List<Customer> customerList)
 }
 
 //Timothy (S10268547H)-------------------------BASIC FEATURE 5 WITH ADVANCED FEATURE-----------------------------------------------------------------------------------------
+bool CheckIfPublicHoliday(DateTime date)
+{
+    List<DateTime> publicHolidays = new List<DateTime>
+    {
+        new DateTime(date.Year, 1, 1),   
+        new DateTime(date.Year, 2, 17),  
+        new DateTime(date.Year, 2, 18),  
+        new DateTime(date.Year, 4, 3),   
+        new DateTime(date.Year, 4, 21),  
+        new DateTime(date.Year, 5, 1),   
+        new DateTime(date.Year, 5, 10), 
+        new DateTime(date.Year, 6, 8),   
+        new DateTime(date.Year, 8, 9),   
+        new DateTime(date.Year, 11, 6),  
+        new DateTime(date.Year, 12, 25) 
+    };
+
+    return publicHolidays.Contains(date.Date);
+}
 void NewOrder()
 {
     Console.WriteLine("Create New Order");
@@ -307,19 +345,99 @@ void NewOrder()
             string discountOccasion = null;
             double discountPercentage = 0;
             double discountMultiplier = 1.0;
+            string specialOfferCode = null;
+            string specialOfferDesc = null;
+
+            // Newcomer discount 
             if (enteredCustomer.orders.Count == 0)
             {
                 discountOccasion = "Newcomer discount";
                 discountPercentage = 5;
                 discountMultiplier = 0.95;
             }
-            else if (timeNow.Hour >= 12 && timeNow.Hour <= 14)
+            // Special offers from CSV
+            else if (selectedRestaurant != null)
+            {
+                List<SpecialOffer> restaurantOffers = new List<SpecialOffer>();
+                foreach (SpecialOffer offer in specialOffers)
+                {
+                    if (offer.Restaurant == selectedRestaurant.RestaurantName)
+                    {
+                        restaurantOffers.Add(offer);
+                    }
+                }
+
+                SpecialOffer applicableOffer = null;
+                // Early Bird 
+                if (timeNow.Hour < 11)
+                {
+                    foreach (SpecialOffer offer in restaurantOffers)
+                    {
+                        if (offer.OfferCode == "EARL")
+                        {
+                            applicableOffer = offer;
+                            break;
+                        }
+                    }
+                }
+
+                // Weekday 
+                if (applicableOffer == null && timeNow.DayOfWeek >= DayOfWeek.Monday && timeNow.DayOfWeek <= DayOfWeek.Friday)
+                {
+                    foreach (SpecialOffer offer in restaurantOffers)
+                    {
+                        if (offer.OfferCode == "WEEK")
+                        {
+                            applicableOffer = offer;
+                            break;
+                        }
+                    }
+                }
+
+                // Public Holiday 
+                if (applicableOffer == null && CheckIfPublicHoliday(timeNow))
+                {
+                    foreach (SpecialOffer offer in restaurantOffers)
+                    {
+                        if (offer.OfferCode == "PHOL")
+                        {
+                            applicableOffer = offer;
+                            break;
+                        }
+                    }
+                }
+
+                // Festive Season 
+                if (applicableOffer == null && timeNow.Month == 12 && timeNow.Day >= 15 && timeNow.Day <= 25)
+                {
+                    foreach (SpecialOffer offer in restaurantOffers)
+                    {
+                        if (offer.OfferCode == "FEST")
+                        {
+                            applicableOffer = offer;
+                            break;
+                        }
+                    }
+                }
+
+                // Apply offer
+                if (applicableOffer != null)
+                {
+                    discountOccasion = applicableOffer.OfferDesc;
+                    discountPercentage = applicableOffer.Discount;
+                    discountMultiplier = 1 - (applicableOffer.Discount / 100.0);
+                    specialOfferCode = applicableOffer.OfferCode;
+                    specialOfferDesc = applicableOffer.OfferDesc;
+                }
+            }
+            // Time based discounts 
+            if (discountOccasion == null && timeNow.Hour >= 12 && timeNow.Hour <= 14)
             {
                 discountOccasion = "Lunch discount";
                 discountPercentage = 20;
                 discountMultiplier = 0.8;
             }
-            else if (timeNow.Hour >= 18 && timeNow.Hour <= 20)
+            else if (discountOccasion == null && timeNow.Hour >= 18 && timeNow.Hour <= 20)
             {
                 discountOccasion = "Dinner discount";
                 discountPercentage = 10;
@@ -328,9 +446,28 @@ void NewOrder()
 
             double orderTotal = nOrder.CalculateOrderTotal();
             double deliveryFee = 5.00;
+
+            // Check for DELI 
+            SpecialOffer deliOffer = null;
+            foreach (SpecialOffer offer in specialOffers)
+            {
+                if (offer.Restaurant == selectedRestaurant.RestaurantName && offer.OfferCode == "DELI")
+                {
+                    deliOffer = offer;
+                    break;
+                }
+            }
+
+            if (deliOffer != null && orderTotal >= 30)
+            {
+                deliveryFee = 0;
+                Console.WriteLine($"\n {deliOffer.OfferDesc} applied! Delivery fee waived.");
+            }
+
             double subTotal = orderTotal + deliveryFee;
             double discountAmount = 0;
             double finalTotal = subTotal;
+
             if (discountOccasion != null)
             {
                 discountAmount = subTotal * (discountPercentage / 100.0);
@@ -346,7 +483,7 @@ void NewOrder()
             else
             {
                 nOrder.OrderTotal = subTotal;
-                Console.WriteLine($"\nOrder Total: ${orderTotal:F2} + $5.00 (delivery) = ${nOrder.OrderTotal:F2}");
+                Console.WriteLine($"\nOrder Total: ${orderTotal:F2} + ${deliveryFee:F2} (delivery) = ${nOrder.OrderTotal:F2}");
             }
             while (true)
             {
@@ -1096,7 +1233,7 @@ void SaveQueueAndStack()
     Console.WriteLine("Queue and stack saved successfully!");
 }
 
-Console.WriteLine($"Welcome to the Gruberoo Food Delivery System\n{restaurantList.Count} restaurants loaded!\n{restaurantList.Sum(r => r.GetMenus().Sum(m => m.GetFoodItems().Count))} food items loaded!\n{customerList.Count} customers loaded!\n{customerList.Sum(c => c.orders.Count)} orders loaded!\n");
+Console.WriteLine($"Welcome to the Gruberoo Food Delivery System\n{restaurantList.Count} restaurants loaded!\n{restaurantList.Sum(r => r.GetMenus().Sum(m => m.GetFoodItems().Count))} food items loaded!\n{customerList.Count} customers loaded!\n{customerList.Sum(c => c.orders.Count)} orders loaded!\n{specialOffers.Count} special offers loaded!\n");
 
 while (true)
 {

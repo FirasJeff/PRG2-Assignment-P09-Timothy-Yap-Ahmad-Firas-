@@ -45,10 +45,14 @@ namespace FirasTimothy_PRG2Assignment
                 return orders.Remove(order);
             }
             else
-            { return false; }
+            { 
+                return false; 
+            }
         }
         public override string ToString() 
-        { return $"Customer: {CustomerName}, Email: {EmailAddress}, Orders: {orders.Count}"; }
+        { 
+            return $"Customer: {CustomerName}, Email: {EmailAddress}, Orders: {orders.Count}"; 
+        }
 
     }
 }
