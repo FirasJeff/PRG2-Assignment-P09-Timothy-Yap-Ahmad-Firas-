@@ -137,7 +137,14 @@ for (int i = 1; i < orderFiles.Length; i++)
     {
         if (parts[2] == r.RestaurantId)
         {
-            r.AddQueue(o);
+            r.AddOrder(o);
+
+            // Only queue orders that restaurant may still need to handle
+            if (o.OrderStatus == "Pending" || o.OrderStatus == "Preparing" || o.OrderStatus == "Cancelled")
+            {
+                r.AddQueue(o);
+            }
+
             r.AddOrder(o);
         }
     }
@@ -575,8 +582,8 @@ void ProcessOrder()
 
     Console.Write("Enter Restaurant ID: ");
     string restaurantId = Console.ReadLine();
-    Restaurant restaurant = null;
 
+    Restaurant restaurant = null;
     foreach (Restaurant r in restaurantList)
     {
         if (r.RestaurantId == restaurantId)
@@ -592,110 +599,116 @@ void ProcessOrder()
         return;
     }
 
-    List<Order> ordersList = restaurant.GetOrders();
-    if (ordersList.Count == 0)
+    //get next order from queue
+    Order order = restaurant.RemoveQueue();
+    if (order == null)
     {
-        Console.WriteLine("No orders for this restaurant.");
+        Console.WriteLine("No orders in queue for this restaurant.");
         return;
     }
 
-    // Process each order
-    List<Order> processedOrders = new List<Order>();
-    foreach (Order order in ordersList)
+    Console.WriteLine($"Order {order.OrderID}:");
+
+    // Find customer name
+    string customerName = "";
+    foreach (Customer c in customerList)
     {
-        if (processedOrders.Contains(order))
-            continue;
-
-        Console.WriteLine($"Order {order.OrderID}:");
-
-        // Find customer name
-        string customerName = "";
-        foreach (Customer c in customerList)
+        foreach (Order o in c.orders)
         {
-            foreach (Order o in c.orders)
+            if (o.OrderID == order.OrderID)
             {
-                if (o.OrderID == order.OrderID)
-                {
-                    customerName = c.CustomerName;
-                    break;
-                }
-            }
-            if (customerName != "")
+                customerName = c.CustomerName;
                 break;
-        }
-
-        Console.WriteLine($"Customer: {customerName}");
-        Console.WriteLine("Ordered Items:");
-
-        for (int i = 0; i < order.orderedItems.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}. {order.orderedItems[i].ItemName} - {order.orderedItems[i].QtyOrdered}");
-        }
-
-        Console.WriteLine($"Delivery date/time: {order.DeliveryDateTime:dd/MM/yyyy HH:mm}");
-        Console.WriteLine($"Total Amount: ${order.OrderTotal:F2}");
-        Console.WriteLine($"Order Status: {order.OrderStatus}");
-
-        Console.Write("[C]onfirm / [R]eject / [S]kip / [D]eliver: ");
-        string action = Console.ReadLine().ToUpper();
-
-        if (action == "C")
-        {
-            if (order.OrderStatus == "Pending")
-            {
-                order.OrderStatus = "Preparing";
-                Console.WriteLine($"Order {order.OrderID} confirmed. Status: Preparing");
-            }
-            else
-            {
-                Console.WriteLine($"Cannot confirm. Order status is {order.OrderStatus}");
             }
         }
-        else if (action == "R")
+        if (customerName != "") break;
+    }
+
+    Console.WriteLine($"Customer: {customerName}");
+    Console.WriteLine("Ordered Items:");
+    for (int i = 0; i < order.orderedItems.Count; i++)
+    {
+        Console.WriteLine($"{i + 1}. {order.orderedItems[i].ItemName} - {order.orderedItems[i].QtyOrdered}");
+    }
+
+    Console.WriteLine($"Delivery date/time: {order.DeliveryDateTime:dd/MM/yyyy HH:mm}");
+    Console.WriteLine($"Total Amount: ${order.OrderTotal:F2}");
+    Console.WriteLine($"Order Status: {order.OrderStatus}");
+
+    Console.Write("[C]onfirm / [R]eject / [S]kip / [D]eliver: ");
+    string action = Console.ReadLine().ToUpper();
+
+    bool requeue = false; // whether to put it back into queue
+
+    if (action == "C")
+    {
+        if (order.OrderStatus == "Pending")
         {
-            if (order.OrderStatus == "Pending")
-            {
-                order.OrderStatus = "Rejected";
-                refundStack.Push(order);
-                Console.WriteLine($"Order {order.OrderID} rejected. Refund of ${order.OrderTotal:F2} processed.");
-            }
-            else
-            {
-                Console.WriteLine($"Cannot reject. Order status is {order.OrderStatus}");
-            }
-        }
-        else if (action == "S")
-        {
-            if (order.OrderStatus == "Cancelled")
-            {
-                Console.WriteLine($"Order {order.OrderID} skipped.");
-            }
-            else
-            {
-                Console.WriteLine($"Can only skip cancelled orders. Current status: {order.OrderStatus}");
-            }
-        }
-        else if (action == "D")
-        {
-            if (order.OrderStatus == "Preparing")
-            {
-                order.OrderStatus = "Delivered";
-                Console.WriteLine($"Order {order.OrderID} delivered. Status: Delivered");
-                
-            }
-            else
-            {
-                Console.WriteLine($"Cannot deliver. Order status is {order.OrderStatus}");
-            }
+            order.OrderStatus = "Preparing";
+            Console.WriteLine($"Order {order.OrderID} confirmed. Status: Preparing");
         }
         else
         {
-            Console.WriteLine("Invalid action.");
+            Console.WriteLine($"Cannot confirm. Order status is {order.OrderStatus}");
         }
 
-        processedOrders.Add(order);
+        // still needs to be processed later
+        requeue = true;
+    }
+    else if (action == "R")
+    {
+        if (order.OrderStatus == "Pending")
+        {
+            order.OrderStatus = "Rejected";
+            refundStack.Push(order);
+            Console.WriteLine($"Order {order.OrderID} rejected. Refund of ${order.OrderTotal:F2} processed.");
+            requeue = false; // done
+        }
+        else
+        {
+            Console.WriteLine($"Cannot reject. Order status is {order.OrderStatus}");
+            requeue = true;
+        }
+    }
+    else if (action == "S")
+    {
+        if (order.OrderStatus == "Cancelled")
+        {
+            Console.WriteLine($"Order {order.OrderID} skipped (Cancelled removed).");
+            requeue = false; // removed from queue
+        }
+        else
+        {
+            Console.WriteLine($"Can only skip cancelled orders. Current status: {order.OrderStatus}");
+            requeue = true;
+        }
+    }
+    else if (action == "D")
+    {
+        if (order.OrderStatus == "Preparing")
+        {
+            order.OrderStatus = "Delivered";
+            Console.WriteLine($"Order {order.OrderID} delivered. Status: Delivered");
+            requeue = false; // done
+        }
+        else
+        {
+            Console.WriteLine($"Cannot deliver. Order status is {order.OrderStatus}");
+            requeue = true;
+        }
+    }
+    else
+    {
+        Console.WriteLine("Invalid action.");
+        requeue = true;
+    }
+
+    if (requeue)
+    {
+        restaurant.AddQueue(order);
     }
 }
+
 
 //Timothy (S10273408F)-------------------------BASIC FEATURE 7-----------------------------------------------------------------------------------------
 void ModifyingOrder()
@@ -1309,6 +1322,3 @@ while (true)
     }
     Console.WriteLine();
 }
-
-Console.WriteLine("\nPress any key to exit...");
-Console.ReadKey();
