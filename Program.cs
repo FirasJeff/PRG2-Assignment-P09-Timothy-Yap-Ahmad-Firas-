@@ -255,26 +255,39 @@ void NewOrder()
 
     Console.Write("Enter Restaurant ID: ");
     string restaurantId = Console.ReadLine();
-    Console.Write("Enter Delivery Date (dd/mm/yyyy): ");
-    DateTime deliveryDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
-    Console.Write("Enter Delivery Time (hh:mm): ");
-    string timeInput = Console.ReadLine();
-    TimeSpan deliveryTime;
+    DateTime deliveryDate = DateTime.MinValue; 
+    TimeSpan deliveryTime = TimeSpan.Zero;
+    DateTime deliveryDateTime = DateTime.MinValue;
     while (true)
     {
-        try
+        Console.Write("Enter Delivery Date (dd/mm/yyyy): ");
+        deliveryDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", null);
+        Console.Write("Enter Delivery Time (hh:mm): ");
+        string timeInput = Console.ReadLine();
+        while (true)
         {
-            deliveryTime = TimeSpan.Parse(timeInput);
+            try
+            {
+                deliveryTime = TimeSpan.Parse(timeInput);
+                break;
+            }
+            catch (FormatException)
+            {
+                Console.Write("Invalid time format. Please enter in HH:mm format (e.g 14:30): ");
+                timeInput = Console.ReadLine();
+            }
+        }
+
+        deliveryDateTime = deliveryDate.Add(deliveryTime);
+        if (deliveryDateTime < DateTime.Now)
+        {
+            Console.WriteLine("Delivery date/time cannot be in the past!");
+        }
+        else
+        {
             break;
         }
-        catch (FormatException)
-        {
-            Console.Write("Invalid time format. Please enter in HH:mm format (e.g 14:30): ");
-            timeInput = Console.ReadLine();
-        }
     }
-
-    DateTime deliveryDateTime = deliveryDate.Add(deliveryTime);
     Console.Write("Enter Delivery Address: ");
     string address = Console.ReadLine();
     Console.WriteLine("Available Food Items:");
@@ -1240,7 +1253,7 @@ while (true)
     Console.WriteLine("===== Gruberoo Food Delivery System =====");
     Console.WriteLine("1.\tList all restaurants and menu items");
     Console.WriteLine("2.\tList all orders");
-    Console.WriteLine("3.\tCreate a new order");
+    Console.WriteLine("3.\tCreate a new order (With Bonus Features)");
     Console.WriteLine("4.\tProcess an order");
     Console.WriteLine("5.\tModify an existing order");
     Console.WriteLine("6.\tDelete an existing order");

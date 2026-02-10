@@ -54,8 +54,7 @@
               "RelativeToolTip": "bin\\Debug\\net8.0\\specialoffers.csv",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002120|",
-              "WhenOpened": "2026-02-10T11:36:27.833Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:36:27.833Z"
             },
             {
               "$type": "Document",
@@ -65,7 +64,7 @@
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\timot\\Desktop\\PRGII_ASG\\PRG2-Assignment-P09-Timothy-Yap-Ahmad-Firas-\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAAAGgAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAA8BAAAAAAAAAAAAABcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-10T11:35:29.669Z",
               "EditorCaption": ""
@@ -80,8 +79,7 @@
               "RelativeToolTip": "SpecialOffer.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAAAADAAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:33:19.372Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:33:19.372Z"
             },
             {
               "$type": "Document",
@@ -93,8 +91,7 @@
               "RelativeToolTip": "Restaurant.cs",
               "ViewState": "AgIAAG8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:32:58.535Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:32:58.535Z"
             },
             {
               "$type": "Document",
@@ -106,8 +103,7 @@
               "RelativeToolTip": "OrderedFoodItem.cs",
               "ViewState": "AgIAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:32:49.395Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:32:49.395Z"
             },
             {
               "$type": "Document",
@@ -119,8 +115,7 @@
               "RelativeToolTip": "Order.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:32:38.509Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:32:38.509Z"
             },
             {
               "$type": "Document",
@@ -132,8 +127,7 @@
               "RelativeToolTip": "menu.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:32:27.027Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:32:27.027Z"
             },
             {
               "$type": "Document",
@@ -145,8 +139,7 @@
               "RelativeToolTip": "Fooditem.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T11:32:20.881Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-10T11:32:20.881Z"
             }
           ]
         }
